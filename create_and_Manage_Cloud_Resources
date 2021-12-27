@@ -1,0 +1,171 @@
+TASK CHALLENGE
+**************************************************************************************************************************************************************************
+Create and Manage Cloud Resources: Challenge Lab
+
+GSP313 Overview
+
+To score 100% you must successfully complete all tasks within the time period!
+This lab is recommended for students who have enrolled in the labs in the Create and Manage Cloud Resources quest. Be sure to review those labs before starting this lab. Are you ready for the challenge?
+Topics tested:
+•	Create an instance
+•	Create a 3-node Kubernetes cluster and run a simple service
+•	Create an HTTP(s) load balancer in front of two web servers
+Challenge scenario
+You have started a new role as a Junior Cloud Engineer for Jooli, Inc. You are expected to help manage the infrastructure at Jooli. Common tasks include provisioning resources for projects.
+You are expected to have the skills and knowledge for these tasks, so step-by-step guides are not provided.
+Some Jooli, Inc. standards you should follow:
+1.	Create all resources in the default region or zone, unless otherwise directed.
+2.	Naming normally uses the format team-resource; for example, an instance could be named nucleus-webserver1.
+3.	Allocate cost-effective resource sizes. Projects are monitored, and excessive resource use will result in the containing project's termination (and possibly yours), so plan carefully. This is the guidance the monitoring team is willing to share: unless directed, use f1-micro for small Linux VMs, and use n1-standard-1 for Windows or other applications, such as Kubernetes nodes.
+Your challenge
+As soon as you sit down at your desk and open your new laptop, you receive several requests from the Nucleus team. Read through each description, and then create the resources.
+
+Task 1: Create a project jumphost instance
+You will use this instance to perform maintenance for the project.
+Requirements:
+•	Name the instance nucleus-jumphost-856 //this instance name will be different for different student username
+•	Use an f1-micro machine type.
+•	Use the default image type (Debian Linux).
+Click Check my progress to verify the objective.
+
+Task 2: Create a Kubernetes service cluster
+There is a limit to the resources you are allowed to create in your project. If you don't get the result you expected, delete the cluster before you create another cluster. If you don't, the lab might end and you might be blocked. In order to get your account unblocked, you will have to reach out to Qwiklabs Support.
+The team is building an application that will use a service running on Kubernetes. You need to:
+•	Create a cluster (in the us-east1-b zone) to host the service.
+•	Use the Docker container hello-app (gcr.io/google-samples/hello-app:2.0) as a place holder; the team will replace the container with their own work later.
+•	Expose the app on port 8080 
+
+
+Task 3: Set up an HTTP load balancer
+You will serve the site via nginx web servers, but you want to ensure that the environment is fault-tolerant. Create an HTTP load balancer with a managed instance group of 2 nginx web servers. Use the following code to configure the web servers; the team will replace this with their own configuration later.
+There is a limit to the resources you are allowed to create in your project, so do not create more than 2 instances in your managed instance group. If you do, the lab might end and you might be banned.
+cat << EOF > startup.sh
+#! /bin/bash
+apt-get update
+apt-get install -y nginx
+service nginx start
+sed -i -- 's/nginx/Google Cloud Platform - '"\$HOSTNAME"'/' /var/www/html/index.nginx-debian.html
+EOF
+
+You need to:
+•	Create an instance template.
+•	Create a target pool.
+•	Create a managed instance group.
+•	Create a firewall rule named as accept-tcp-rule-354 to allow traffic (80/tcp).
+•	Create a health check.
+•	Create a backend service, and attach the managed instance group with named port (http:80).
+•	Create a URL map, and target the HTTP proxy to route requests to your URL map.
+•	Create a forwarding rule.
+Click Check my progress to verify the objective.
+
+**************************************************************************************************************************************************************************
+// it is assumed that you are familiar with the gcp 
+// Login and create a Jumphost instance
+in the GCP Console, Navigate to MENU > Compute Engine > VM Instance
+Change only yhe following parameters
+•	Name the instance nucleus-jumphost-856 //this instance name will be different for different student username
+•	Use an f1-micro machine type.
+•	Use the default image type (Debian Linux).
+// activate Cloud Shell
+
+
+Welcome to Cloud Shell! Type "help" to get started.
+Your Cloud Platform project in this session is set to qwiklabs-gcp-01-2527c77d244a.
+Use “gcloud config set project [PROJECT_ID]” to change to a different project.
+
+// You can list the active account name with this command:
+gcloud auth list
+Credentialed Accounts
+
+ACTIVE: *
+ACCOUNT: student-03-fe6424c1e92d@qwiklabs.net
+
+To set the active account, run:
+    $ gcloud config set account `ACCOUNT`
+    
+    
+Task 2: Create a Kubernetes service cluster
+There is a limit to the resources you are allowed to create in your project. If you don't get the result you expected, delete the cluster before you create another cluster. If you don't, the lab might end and you might be blocked. In order to get your account unblocked, you will have to reach out to Qwiklabs Support.
+The team is building an application that will use a service running on Kubernetes. You need to:
+•	Create a cluster (in the us-east1-b zone) to host the service.
+•	Use the Docker container hello-app (gcr.io/google-samples/hello-app:2.0) as a place holder; the team will replace the container with their own work later.
+•	Expose the app on port 8080 //this port number could be different for different student username
+
+student_03)$ gcloud config set compute/zone us-east1-b
+
+student_03)$ gcloud container clusters create nucleus-jumphost-webserver1
+
+student_03)$ gcloud container clusters get-credentials nucleus-jumphost-webserver1
+
+student_03)$ kubectl create deployment hello-app --image=gcr.io/google-samples/hello-app:2.0
+
+student_03)$ kubectl expose deployment hello-app --type=LoadBalancer --port 8080
+
+Task 3: Set up an HTTP load balancer
+You will serve the site via nginx web servers, but you want to ensure that the environment is fault-tolerant. Create an HTTP load balancer with a managed instance group of 2 nginx web servers. Use the following code to configure the web servers; the team will replace this with their own configuration later.
+There is a limit to the resources you are allowed to create in your project, so do not create more than 2 instances in your managed instance group. If you do, the lab might end and you might be banned.
+cat << EOF > startup.sh
+#! /bin/bash
+apt-get update
+apt-get install -y nginx
+service nginx start
+sed -i -- 's/nginx/Google Cloud Platform - '"\$HOSTNAME"'/' /var/www/html/index.nginx-debian.html
+EOF
+
+You need to:
+•	Create an instance template.
+•	Create a target pool.
+•	Create a managed instance group.
+•	Create a firewall rule named as accept-tcp-rule-354 to allow traffic (80/tcp).
+•	Create a health check.
+•	Create a backend service, and attach the managed instance group with named port (http:80).
+•	Create a URL map, and target the HTTP proxy to route requests to your URL map.
+•	Create a forwarding rule.
+Click Check my progress to verify the objective.
+
+
+copy paste the following commands
+cat << EOF > startup.sh
+> #! /bin/bash
+> apt-get update
+> apt-get install -y nginx
+> service nginx start
+> sed -i -- 's/nginx/Google Cloud Platform - '"\$HOSTNAME"'/' /var/www/html/index.nginx-debian.html
+> EOF
+
+•	Create an instance template. If prompted type n then type the number corresponding to us-east1 zone
+student_03)$ gcloud compute instance-templates create nginx-template --metadata-from-file startup-script=startup.sh
+
+•	Create a target pool.
+student_03)$ gcloud compute target-pools create nginx-pool
+
+•	Create a managed instance group.
+student_03)$ gcloud compute instance-groups managed create nginx-group --base-instance-name nginx --size 2 --template nginx-template --target-pool nginx-pool
+student_03)$ gcloud compute instances list
+
+•	Create a firewall rule named as accept-tcp-rule-354 to allow traffic (80/tcp).
+student_03)$ gcloud compute firewall-rules create accept-tcp-rule-354 --allow tcp:80
+student_03)$ gcloud compute forwarding-rules create nginx-lb --region us-east1 --ports=80 --target-pool nginx-pool
+student_03)$ gcloud compute forwarding-rules list
+
+•	Create a health check.
+student_03)$ gcloud compute http-health-checks create http-basic-check
+student_03)$ gcloud compute instance-groups managed set-named-ports nginx-group --named-ports http:80
+
+•	Create a backend service, and attach the managed instance group with named port (http:80).
+student_03)$ gcloud compute backend-services create nginx-backend --protocol HTTP --http-health-checks http-basic-check --global
+student_03)$ gcloud compute backend-services add-backend nginx-backend --instance-group nginx-group --instance-group-zone us-east1-b --global
+
+•	Create a URL map, and target the HTTP proxy to route requests to your URL map.
+student_03)$ gcloud compute url-maps create web-map --default-service nginx-backend
+student_03)$ gcloud compute target-http-proxies create http-lb-proxy --url-map web-map
+
+•	Create a forwarding rule.
+student_03)$ gcloud compute forwarding-rules create http-content-rule --global --target-http-proxy http-lb-proxy --ports 80
+student_03)$ gcloud compute forwarding-rules list
+
+
+student_03)$
+END OF THE LAB. 
+Congratulations
+
