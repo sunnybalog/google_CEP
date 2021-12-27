@@ -8,6 +8,9 @@ Learning resources follows the following path
  url = https://cloud.google.com/training/cloud-infrastructure#cloud-engineer-learning-path
 
 STEPS
+Following the resources in the url above in the following order.
+
+
 1. Architecting with Google Compute Engine
 2. Getting Started with Google Kubernetes Engine
 3. Google Cloud Fundamentals: Core Infrastructure
